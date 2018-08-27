@@ -8,7 +8,6 @@ class EnumMeta(type):
         _member_to_map_ = {}
         _value2member_map_ = {}
         metacls = cls.__class__
-        print(cls)
         for key in dct.keys():
             if key not in _ignore_:
                 attr_name = str(key)
@@ -42,7 +41,7 @@ class EnumMeta(type):
         raise AttributeError('Cannot reassign members')
 
     def __iter__(cls):
-        yield sorted([member for member in cls._member_to_map_.values()])
+        return iter(cls._member_to_map_.values())
 
     def __getitem__(cls, key):
         return cls.__dict__[key]
@@ -66,7 +65,6 @@ class Enum(metaclass=EnumMeta):
                 new_enum.name = key
                 new_enum.value = val
                 cls._member_to_map_[key] = new_enum
-                print('created instance of', new_enum.name, id(new_enum))
             return cls._member_to_map_[key]
         else:
             raise ValueError('{} is not a valid {}'.format(val, cls.__name__))
@@ -74,9 +72,16 @@ class Enum(metaclass=EnumMeta):
     def __str__(self):
             return '<{}.{}: {}>'.format(self.__objclass__, self.name, self.value)
 
+    # def __iter__(self):
+    #     print(self.__dict__)
+    #     yield _member_to_map_.value()
 
 class Direction(Enum):
     north = 0
     east = 90
     south = 180
     west = 270
+
+
+for d in Direction:
+    print(d)
